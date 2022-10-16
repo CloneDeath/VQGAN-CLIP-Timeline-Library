@@ -10,13 +10,9 @@ from tqdm import tqdm
 import sys
 import os
 
-# pip install taming-transformers doesn't work with Gumbel, but does not yet work with coco etc
-# appending the path does work with Gumbel, but gives ModuleNotFoundError: No module named 'transformers' for coco etc
-sys.path.append('taming-transformers')
-
 from omegaconf import OmegaConf
 from taming.models import cond_transformer, vqgan
-#import taming.modules 
+# import taming.modules
 
 import torch
 from torch import nn, optim
@@ -24,18 +20,15 @@ from torch.nn import functional as F
 from torchvision import transforms
 from torchvision.transforms import functional as TF
 from torch.cuda import get_device_properties
-torch.backends.cudnn.benchmark = False		# NR: True is a bit faster, but can lead to OOM. False is more deterministic.
-#torch.use_deterministic_algorithms(True)	# NR: grid_sampler_2d_backward_cuda does not have a deterministic implementation
 
 from torch_optimizer import DiffGrad, AdamP
 
-from CLIP import clip
+import clip
 import kornia.augmentation as K
 import numpy as np
 import imageio
 
 from PIL import ImageFile, Image, PngImagePlugin, ImageChops
-ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 from subprocess import Popen, PIPE
 import re
@@ -44,6 +37,16 @@ import re
 import warnings
 warnings.filterwarnings('ignore')
 
+# pip install taming-transformers doesn't work with Gumbel, but does not yet work with coco etc
+# appending the path does work with Gumbel, but gives ModuleNotFoundError: No module named 'transformers' for coco etc
+sys.path.append('taming-transformers')
+
+torch.backends.cudnn.benchmark = False		# NR: True is a bit faster, but can lead to OOM. False is more deterministic.
+
+# NR: grid_sampler_2d_backward_cuda does not have a deterministic implementation
+# torch.use_deterministic_algorithms(True)
+
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 # Check for GPU and reduce the default image size if low VRAM
 default_image_size = 512  # >8GB VRAM
@@ -96,7 +99,6 @@ vq_parser.add_argument("-cd",   "--cuda_device", type=str, help="Cuda device to 
 vq_parser.add_argument("-tf",    "--timeline_file", type=str, help="File with timeline data", default=None, dest='timeline_file')
 
 
-
 # Execute the parse_args() method
 args = vq_parser.parse_args()
 
@@ -104,10 +106,10 @@ if not args.prompts and not args.image_prompts and not args.timeline_file:
     args.prompts = "A cute, smiling, Nerdy Rodent"
 
 if args.cudnn_determinism:
-   torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.deterministic = True
 
 if not args.augments:
-   args.augments = [['Af', 'Pe', 'Ji', 'Er']]
+    args.augments = [['Af', 'Pe', 'Ji', 'Er']]
 
 # Split text prompts using the pipe character (weights are split later)
 if args.prompts:
@@ -619,10 +621,10 @@ def read_timeline_file(path):
 
     return timelineData
 
+
 # Read Timeline File
 if args.timeline_file:
     timeline = read_timeline_file(args.timeline_file)
-
 
 
 # Do it

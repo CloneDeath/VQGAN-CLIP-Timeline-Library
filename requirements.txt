@@ -1,3 +1,5 @@
+--find-links https://download.pytorch.org/whl/torch_stable.html
+
 absl-py==0.13.0
 aiohttp==3.7.4.post0
 antlr4-python3-runtime==4.8
@@ -62,3 +64,6 @@ urllib3==1.26.6
 wcwidth==0.2.5
 Werkzeug==2.0.1
 yarl==1.6.3
+
+taming-transformers
+clip-by-openai
