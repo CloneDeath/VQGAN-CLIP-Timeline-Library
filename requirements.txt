@@ -64,6 +64,3 @@ urllib3==1.26.6
 wcwidth==0.2.5
 Werkzeug==2.0.1
 yarl==1.6.3
-
-taming-transformers
-clip-by-openai
