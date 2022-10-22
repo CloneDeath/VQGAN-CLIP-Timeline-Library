@@ -1,4 +1,4 @@
---find-links https://download.pytorch.org/whl/torch_stable.html
+# --index-url https://download.pytorch.org/whl/torch_stable.html
 
 absl-py==0.13.0
 aiohttp==3.7.4.post0
@@ -52,10 +52,10 @@ rsa==4.7.2
 six==1.16.0
 tensorboard==2.4.1
 tensorboard-plugin-wit==1.8.0
-torch==1.9.0+cu111
+# torch==1.9.0+cu111
 torchaudio==0.9.0
 torchmetrics==0.3.2
-torchvision==0.10.0+cu111
+# torchvision==0.10.0+cu111
 torch-optimizer==0.3.0
 tqdm==4.61.1
 traitlets==5.0.5
