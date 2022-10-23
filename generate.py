@@ -1148,5 +1148,6 @@ def generate_image(arguments: [str]) -> None:
             p.stdin.close()
             p.wait()
 
+
 if __name__ == "__main__":
-    generate_image()
+    generate_image(sys.argv)
