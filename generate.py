@@ -631,7 +631,7 @@ def generate_image(arguments: [str]) -> None:
     device = torch.device(args.cuda_device)
     model = load_vqgan_model(args.vqgan_config, args.vqgan_checkpoint).to(device)
     jit = True if "1.7.1" in torch.__version__ else False
-    perceptor = clip.load(args.clip_model, jit=False)[0].eval().requires_grad_(False).to(device)
+    perceptor = clip.load(args.clip_model, jit=jit)[0].eval().requires_grad_(False).to(device)
     # clock=deepcopy(perceptor.visual.positional_embedding.data)
     # perceptor.visual.positional_embedding.data = clock/clock.max()
     # perceptor.visual.positional_embedding.data=clamp_with_grad(clock,0,1)
@@ -776,8 +776,8 @@ def generate_image(arguments: [str]) -> None:
             z_q = vector_quantize(z.movedim(1, 3), model.quantize.embedding.weight).movedim(3, 1)
         return clamp_with_grad(model.decode(z_q).add(1).div(2), 0, 1)
 
-    # @torch.inference_mode()
-    @torch.no_grad()
+    # @torch.no_grad()
+    @torch.inference_mode()
     def checkin(i, losses):
         losses_str = ', '.join(f'{loss.item():g}' for loss in losses)
         tqdm.write(f'i: {i}, loss: {sum(losses).item():g}, losses: {losses_str}')
@@ -820,8 +820,8 @@ def generate_image(arguments: [str]) -> None:
         loss.backward()
         opt.step()
 
-        # with torch.inference_mode():
-        with torch.no_grad():
+        # with torch.no_grad():
+        with torch.inference_mode():
             z.copy_(z.maximum(z_min).minimum(z_max))
 
     i = 0  # Iteration counter
